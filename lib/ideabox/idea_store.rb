@@ -1,8 +1,12 @@
+require './lib/ideabox/idea'
+
 class IdeaStore
   def self.save(idea)
     @all ||= []
-    idea.id = next_id
-    @all << idea
+    if idea.new?
+      idea.id = next_id
+      @all << idea
+    end
     idea.id
   end
 
@@ -20,7 +24,7 @@ class IdeaStore
     count + 1
   end
 
-  def self.reset
+  def self.delete_all
     @all = []
   end
 

@@ -1,12 +1,12 @@
-gem 'minitest'
-require 'minitest/autorun'
-require './lib/ideabox/idea'
+require './test/test_helper'
 require './lib/ideabox/idea_store'
 
 class IdeaStoreTest < Minitest::Test
+  def teardown
+    IdeaStore.delete_all
+  end
 
   def test_save_and_retrieve_an_idea
-    IdeaStore.reset
     idea = Idea.new('celebrate', 'with champagne')
     id = IdeaStore.save(idea)
     assert_equal 1, IdeaStore.count
@@ -16,12 +16,10 @@ class IdeaStoreTest < Minitest::Test
   end
 
   def test_rest_of_idea_store
-    IdeaStore.reset
     assert_equal 0, IdeaStore.count
   end
 
   def test_save_and_retrieve_multiple_ideas
-    IdeaStore.reset
     idea1 = Idea.new('celebrate', 'with champagne')
     id1 = IdeaStore.save(idea1)
 
@@ -39,5 +37,22 @@ class IdeaStoreTest < Minitest::Test
     found_idea2 = IdeaStore.find(id2)
     assert_equal 'dream', found_idea2.title
     assert_equal 'of unicorns and rainbows', found_idea2.description
+  end
+
+  def test_update_idea
+    idea = Idea.new("drink", "tomato juice")
+    id = IdeaStore.save(idea)
+
+    idea = IdeaStore.find(id)
+    idea.title = "cocktails"
+    idea.description = "spicy tomato juice with vodka"
+
+    IdeaStore.save(idea)
+
+    assert_equal 1, IdeaStore.count
+
+    idea = IdeaStore.find(id)
+    assert_equal "cocktails", idea.title
+    assert_equal "spicy tomato juice with vodka", idea.description
   end
 end
