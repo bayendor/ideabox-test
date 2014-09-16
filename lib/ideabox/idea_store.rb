@@ -28,11 +28,11 @@ class IdeaStore
     @all = []
   end
 
-  def self.all
-    @all
+  class << self
+    attr_reader :all
   end
 
   def self.delete(id)
-    @all.delete_if{ |idea| idea.id == id }
+    @all.delete_if { |idea| idea.id == id }
   end
 end
