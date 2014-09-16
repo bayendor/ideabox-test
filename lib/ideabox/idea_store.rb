@@ -15,9 +15,7 @@ class IdeaStore
   end
 
   def self.find(id)
-    @all.find do |idea|
-      idea.id == id
-    end
+    @all.find { |idea| idea.id == id }
   end
 
   def self.next_id
